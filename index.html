@@ -257,22 +257,19 @@ function download() {
   const ctx=o.getContext("2d");
   ctx.beginPath(); ctx.arc(OUT/2,OUT/2,OUT/2,0,Math.PI*2); ctx.clip();
   ctx.drawImage(src,0,0);
-  const url = o.toDataURL("image/png");
 
-  // iOS Safari does not support a.download — detect it and open in same tab
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-  if (isIOS) {
-    // Open image in current tab — user taps & holds -> "Save to Photos"
-    window.location.href = url;
-  } else {
-    // Android, desktop: normal download
+  // Convert canvas to Blob, then object URL — works on iOS Safari, Android, desktop
+  o.toBlob(function(blob) {
+    const blobUrl = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url;
+    a.href = blobUrl;
     a.download = mode + "-profil.png";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-  }
+    // Small delay before revoking so Safari has time to trigger download
+    setTimeout(function() { URL.revokeObjectURL(blobUrl); }, 1000);
+  }, "image/png");
 }
 
 // ── Reset ──
