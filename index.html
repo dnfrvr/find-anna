@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FINDANNA</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000080;min-height:100%}
+body{background:#000080;font-family:"Comic Sans MS","Chalkboard SE",cursive;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:10px}
+.mq{width:100%;background:#f00;color:#ff0;font-size:12px;font-weight:bold;overflow:hidden;white-space:nowrap;padding:4px 0;border-top:3px solid #ff0;border-bottom:3px solid #ff0;margin-bottom:10px}
+.mi{display:inline-block;animation:mq 24s linear infinite}
+@keyframes mq{from{transform:translateX(100vw)}to{transform:translateX(-100%)}}
+.tb{background:linear-gradient(180deg,#ccf,#99f 40%,#66c);border:4px outset #fff;border-radius:6px;padding:12px 24px;text-align:center;margin-bottom:12px;box-shadow:4px 4px 0 #000033;width:100%;max-width:620px}
+.tb h1{font-family:Orbitron,Impact,sans-serif;font-size:clamp(1.4rem,5vw,2.4rem);color:#f00;text-shadow:2px 2px 0 #000;letter-spacing:2px}
+.ts{color:#ff0;font-size:12px;text-shadow:1px 1px 0 #000;margin-top:4px;font-weight:bold}
+.tg{margin-top:5px;font-size:11px;color:#ccffcc;font-style:italic;text-shadow:1px 1px 0 #000}
+.bl{animation:bl 1s step-end infinite}
+@keyframes bl{50%{opacity:0}}
+.st{color:#ff0;font-size:18px;letter-spacing:6px;margin:4px 0 10px}
+.bx{background:linear-gradient(135deg,#ffffcc,#ffff99,#ffffcc);border:5px outset #cc0;border-radius:4px;padding:18px;width:100%;max-width:620px;box-shadow:6px 6px 0 #000066}
+.sl{font-size:13px;font-weight:bold;color:#000080;margin-bottom:6px;text-decoration:underline}
+.mbs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.mbtn{flex:1;min-width:130px;padding:10px 8px;font-family:Impact,"Arial Black",sans-serif;font-size:15px;cursor:pointer;border:3px outset #888;border-radius:3px;background:linear-gradient(180deg,#ddd,#aaa);color:#000;text-align:center}
+.mbtn:active{border-style:inset}
+.fa{background:linear-gradient(180deg,#f66,#c00)!important;color:#fff!important;border-color:#600!important;text-shadow:1px 1px 0 #000}
+.gl{background:linear-gradient(180deg,#f9c,#c06)!important;color:#fff!important;border-color:#603!important;text-shadow:1px 1px 0 #000}
+.uz{border:3px dashed #000080;border-radius:4px;background:#e8e8ff;padding:20px;text-align:center;margin-bottom:4px;cursor:pointer;position:relative}
+.uz:hover{background:#d0d0ff}
+.uz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.ic{font-size:2rem;margin-bottom:6px}
+.uz p{font-size:13px;color:#000080}
+.uz strong{display:block;font-size:14px;color:#000080;margin-bottom:4px}
+.db{padding:10px 28px;font-family:Impact,"Arial Black",sans-serif;font-size:16px;cursor:pointer;border:4px outset #f60;border-radius:4px;background:linear-gradient(180deg,#fa0,#c60);color:#fff;text-shadow:1px 1px 0 #000;letter-spacing:1px;animation:gw 2s ease-in-out infinite;display:block;margin:0 auto}
+.db:active{border-style:inset}
+@keyframes gw{0%,100%{box-shadow:0 0 6px #f60}50%{box-shadow:0 0 18px #ff0,0 0 30px #f60}}
+.rl{background:none;border:none;color:#000080;font-size:11px;cursor:pointer;text-decoration:underline;font-family:"Comic Sans MS",cursive;display:block;margin:6px auto 0;text-align:center}
+.ft{margin-top:14px;text-align:center;color:#aaf;font-size:11px;text-shadow:1px 1px 0 #000;padding-bottom:20px}
+.vc{margin-top:6px;font-size:11px;color:#ff0;background:#000;border:1px solid #ff0;display:inline-block;padding:2px 8px;font-family:"Courier New",monospace;letter-spacing:2px}
+.sp{font-size:18px;animation:sp 2s linear infinite;display:inline-block}
+@keyframes sp{to{transform:rotate(360deg)}}
+#preview-wrap{display:none;flex-direction:column;align-items:center;gap:12px;margin-top:8px}
+#preview-wrap.visible{display:flex}
+.circle{border:5px outset #99f;border-radius:50%;overflow:hidden;box-shadow:0 0 20px #f0f,4px 4px 0 #000;width:260px;height:260px;flex-shrink:0}
+#main-canvas{display:block;width:260px;height:260px}
+.credit{font-size:10px;font-style:italic;color:#000080;text-align:center}
+
+/* Crop modal */
+#crop-modal{display:none;position:fixed;inset:0;background:rgba(0,0,80,.92);align-items:center;justify-content:center;z-index:9999;padding:12px}
+#crop-modal.visible{display:flex}
+.crop-box{background:linear-gradient(135deg,#ffffcc,#ffff99);border:5px outset #cccc00;border-radius:4px;padding:16px;box-shadow:6px 6px 0 #000066;width:100%;max-width:340px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.crop-title{font-family:Orbitron,Impact,sans-serif;font-size:13px;color:#000080;font-weight:700;text-align:center}
+.crop-title span{font-size:11px;font-family:“Comic Sans MS”,cursive;font-weight:normal;display:block;margin-top:3px}
+#crop-circle{width:300px;height:300px;border-radius:50%;overflow:hidden;border:3px solid #888;cursor:grab;touch-action:none;background:#000;flex-shrink:0}
+#crop-canvas{display:block}
+.zoom-row{display:flex;gap:8px;width:100%;align-items:center}
+.zoom-row label{font-size:13px;font-family:“Comic Sans MS”,cursive;color:#000080;font-weight:bold;white-space:nowrap}
+#zoom-range{flex:1;accent-color:#cc0000;cursor:pointer}
+.crop-credits{font-size:10px;font-style:italic;color:#666;text-align:center}
+.crop-btns{display:flex;gap:8px;width:100%}
+.crop-btns button{flex:1;padding:10px 0;font-family:Impact,“Arial Black”,sans-serif;font-size:15px;cursor:pointer;border-radius:3px}
+#btn-cancel{border:3px outset #888;background:linear-gradient(180deg,#ddd,#aaa);color:#000}
+#btn-confirm{border:3px outset #005500;background:linear-gradient(180deg,#66ff66,#009900);color:#fff;text-shadow:1px 1px 0 #000}
+#btn-cancel:active,#btn-confirm:active{border-style:inset}
+</style>
+
+</head>
+<body>
+
+<!-- Crop modal -->
+
+<div id="crop-modal">
+  <div class="crop-box">
+    <div class="crop-title">CADREZ VOTRE PHOTO <span>Glissez pour deplacer</span></div>
+    <div id="crop-circle"><canvas id="crop-canvas" width="300" height="300"></canvas></div>
+    <div class="zoom-row">
+      <label>Zoom</label>
+      <input type="range" id="zoom-range" min="0.1" max="4" step="0.01" value="1"/>
+    </div>
+    <div class="crop-credits">Humble idee de l'humble Glinda Ravingfool</div>
+    <div class="crop-btns">
+      <button id="btn-cancel">ANNULER</button>
+      <button id="btn-confirm">VALIDER</button>
+    </div>
+  </div>
+</div>
+
+<!-- Page -->
+
+<div class="mq"><span class="mi">HUMBLE IDEE DE L'HUMBLE GLINDA RAVINGFOOL ★ #FINDANNA ★ #GLINDAFORANNA ★ FAITES TOURNER ★ AIDE ANNA ★ HUMBLE IDEE DE L'HUMBLE GLINDA RAVINGFOOL ★ #FINDANNA ★ #GLINDAFORANNA ★ FAITES TOURNER ★ AIDE ANNA ★&nbsp;</span></div>
+
+<div class="tb">
+  <h1><span class="bl">★</span> FIND ANNA <span class="bl">★</span></h1>
+  <div class="ts"><span class="bl">►</span> Generateur de photo de profil solidaire <span class="bl">◄</span></div>
+  <div class="tg">✨ Humble idee de l'humble Glinda Ravingfool ✨</div>
+</div>
+
+<div class="st">✦ ✦ ✦ ✦ ✦ ✦ ✦</div>
+
+<div class="bx">
+  <div class="sl">CHOISISSEZ VOTRE BANNIERE :</div>
+  <div class="mbs">
+    <button class="mbtn fa" id="btn-findanna" onclick="setMode('findanna')">🔴 #FINDANNA</button>
+    <button class="mbtn" id="btn-glinda" onclick="setMode('glinda')">💗 #GLINDAFORANNA</button>
+  </div>
+
+  <div id="upload-section">
+    <div class="sl">UPLOADEZ VOTRE PHOTO :</div>
+    <div class="uz">
+      <input type="file" accept="image/*" id="file-input"/>
+      <div class="ic">📷</div>
+      <strong>Appuyez pour choisir une photo</strong>
+      <p>Galerie ou camera — JPG, PNG, HEIC</p>
+      <p style="margin-top:8px;font-size:10px;font-style:italic;color:#777">Humble idee de l'humble Glinda Ravingfool</p>
+    </div>
+  </div>
+
+  <div id="preview-wrap">
+    <div class="circle"><canvas id="main-canvas" width="600" height="600"></canvas></div>
+    <div class="credit">Humble idee de l'humble Glinda Ravingfool</div>
+    <button class="db" onclick="download()">TELECHARGER MA PHOTO !</button>
+    <button class="rl" onclick="reset()">↩ Changer de photo</button>
+  </div>
+</div>
+
+<div class="ft">
+  <div><span class="sp">⚙</span> Site en construction — Meilleur rendu sous IE 8 <span class="sp">⚙</span></div>
+  <div style="margin-top:5px;font-style:italic;color:#ccffcc">Humble idee de l'humble Glinda Ravingfool</div>
+  <div style="margin-top:6px">Vous etes le visiteur</div>
+  <div class="vc" id="visitor-count"></div>
+  <div style="margin-top:6px;color:#aaf">© 2012 FINDANNA.net — <span style="color:#f66">Faites tourner SVP !!!</span></div>
+</div>
+
+<script>
+// ── State ──
+const CONFIGS = {
+  findanna: { text:"#FINDANNA",      bg:"#D0021B" },
+  glinda:   { text:"#GLINDAFORANNA", bg:"#C2185B" },
+};
+const OUT=600, CROP=300;
+let mode="findanna", srcCanvas=null;
+let cropImg=null, cropZoom=1, cropMinZoom=1, cropPan={x:0,y:0};
+
+// Visitor count
+document.getElementById("visitor-count").textContent =
+  (Math.floor(Math.random()*90000)+10000).toLocaleString("fr-FR");
+
+// ── Mode switch ──
+function setMode(m) {
+  mode = m;
+  document.getElementById("btn-findanna").className = "mbtn" + (m==="findanna"?" fa":"");
+  document.getElementById("btn-glinda").className   = "mbtn" + (m==="glinda"?" gl":"");
+  if (srcCanvas) renderFinal();
+}
+
+// ── Draw banner ──
+function drawBanner(ctx, cfg, S) {
+  const h = Math.round(S*0.18), margin = Math.round(S*0.08), y = S-h-margin;
+  ctx.save(); ctx.fillStyle=cfg.bg; ctx.fillRect(0,y,S,h+margin+2); ctx.restore();
+  const fs = Math.round((cfg.text.length>10?46:48)*S/600);
+  ctx.save();
+  ctx.font = `900 ${fs}px Impact,"Arial Black",sans-serif`;
+  ctx.fillStyle="#fff"; ctx.textAlign="center"; ctx.textBaseline="middle";
+  ctx.shadowColor="rgba(0,0,0,0.8)"; ctx.shadowBlur=3;
+  ctx.fillText(cfg.text, S/2, y+h/2);
+  ctx.restore();
+}
+
+// ── Render final ──
+function renderFinal() {
+  const dst = document.getElementById("main-canvas");
+  const ctx = dst.getContext("2d");
+  ctx.clearRect(0,0,OUT,OUT);
+  ctx.drawImage(srcCanvas,0,0,OUT,OUT);
+  drawBanner(ctx, CONFIGS[mode], OUT);
+}
+
+// ── File input ──
+document.getElementById("file-input").addEventListener("change", function(e) {
+  const f = e.target.files&&e.target.files[0]; if(!f) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) { openCrop(ev.target.result); };
+  reader.readAsDataURL(f);
+  e.target.value="";
+});
+
+// ── Crop ──
+function openCrop(src) {
+  cropImg = new Image();
+  cropImg.onload = function() {
+    cropMinZoom = Math.max(CROP/cropImg.naturalWidth, CROP/cropImg.naturalHeight);
+    cropZoom = cropMinZoom;
+    cropPan = {x:0,y:0};
+    document.getElementById("zoom-range").min = cropMinZoom;
+    document.getElementById("zoom-range").value = cropZoom;
+    document.getElementById("crop-modal").classList.add("visible");
+    drawCrop();
+  };
+  cropImg.src = src;
+}
+
+function drawCrop() {
+  const c = document.getElementById("crop-canvas");
+  const ctx = c.getContext("2d");
+  ctx.clearRect(0,0,CROP,CROP);
+  const w=cropImg.naturalWidth*cropZoom, h=cropImg.naturalHeight*cropZoom;
+  ctx.drawImage(cropImg,(CROP-w)/2+cropPan.x,(CROP-h)/2+cropPan.y,w,h);
+  ctx.save(); ctx.beginPath(); ctx.arc(CROP/2,CROP/2,CROP/2-1,0,Math.PI*2);
+  ctx.strokeStyle="rgba(255,255,0,.85)"; ctx.lineWidth=2; ctx.setLineDash([6,4]); ctx.stroke(); ctx.restore();
+}
+
+document.getElementById("zoom-range").addEventListener("input", function() {
+  cropZoom = parseFloat(this.value); drawCrop();
+});
+
+// Drag
+const cropCircle = document.getElementById("crop-circle");
+cropCircle.addEventListener("mousedown", startDrag);
+cropCircle.addEventListener("touchstart", startDrag, {passive:false});
+function startDrag(e) {
+  e.preventDefault();
+  const sx=e.touches?e.touches[0].clientX:e.clientX;
+  const sy=e.touches?e.touches[0].clientY:e.clientY;
+  const ox=cropPan.x, oy=cropPan.y;
+  function mv(ev) {
+    const cx=ev.touches?ev.touches[0].clientX:ev.clientX;
+    const cy=ev.touches?ev.touches[0].clientY:ev.clientY;
+    cropPan={x:ox+cx-sx,y:oy+cy-sy}; drawCrop();
+  }
+  function up() { window.removeEventListener("mousemove",mv); window.removeEventListener("touchmove",mv); window.removeEventListener("mouseup",up); window.removeEventListener("touchend",up); }
+  window.addEventListener("mousemove",mv); window.addEventListener("touchmove",mv,{passive:false});
+  window.addEventListener("mouseup",up); window.addEventListener("touchend",up);
+}
+
+document.getElementById("btn-cancel").onclick = function() {
+  document.getElementById("crop-modal").classList.remove("visible");
+};
+
+document.getElementById("btn-confirm").onclick = function() {
+  const o = document.createElement("canvas"); o.width=o.height=OUT;
+  const ctx=o.getContext("2d"), sc=OUT/CROP;
+  const w=cropImg.naturalWidth*cropZoom*sc, h=cropImg.naturalHeight*cropZoom*sc;
+  ctx.drawImage(cropImg,(OUT-w)/2+cropPan.x*sc,(OUT-h)/2+cropPan.y*sc,w,h);
+  srcCanvas = o;
+  document.getElementById("crop-modal").classList.remove("visible");
+  document.getElementById("upload-section").style.display="none";
+  document.getElementById("preview-wrap").classList.add("visible");
+  renderFinal();
+};
+
+// ── Download ──
+function download() {
+  const src = document.getElementById("main-canvas");
+  const o = document.createElement("canvas"); o.width=o.height=OUT;
+  const ctx=o.getContext("2d");
+  ctx.beginPath(); ctx.arc(OUT/2,OUT/2,OUT/2,0,Math.PI*2); ctx.clip();
+  ctx.drawImage(src,0,0);
+  const url = o.toDataURL("image/png");
+
+  // iOS Safari does not support a.download — detect it and open in same tab
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  if (isIOS) {
+    // Open image in current tab — user taps & holds -> "Save to Photos"
+    window.location.href = url;
+  } else {
+    // Android, desktop: normal download
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = mode + "-profil.png";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+}
+
+// ── Reset ──
+function reset() {
+  srcCanvas=null;
+  document.getElementById("upload-section").style.display="block";
+  document.getElementById("preview-wrap").classList.remove("visible");
+  const ctx=document.getElementById("main-canvas").getContext("2d");
+  ctx.clearRect(0,0,OUT,OUT);
+}
+</script>
+
+</body>
+</html>
